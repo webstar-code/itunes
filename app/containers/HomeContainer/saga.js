@@ -4,6 +4,7 @@ import { homeContainerTypes, homeContainerCreators } from './reducer';
 
 const { REQUEST_GET_GITHUB_REPOS } = homeContainerTypes;
 const { successGetGithubRepos, failureGetGithubRepos } = homeContainerCreators;
+
 export function* getGithubRepos(action) {
   const response = yield call(getRepos, action.repoName);
   const { data, ok } = response;
@@ -13,6 +14,8 @@ export function* getGithubRepos(action) {
     yield put(failureGetGithubRepos(data));
   }
 }
+
+
 // Individual exports for testing
 export default function* homeContainerSaga() {
   yield takeLatest(REQUEST_GET_GITHUB_REPOS, getGithubRepos);

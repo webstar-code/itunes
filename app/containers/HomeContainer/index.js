@@ -13,9 +13,9 @@ import { useHistory } from 'react-router-dom';
 import T from '@components/T';
 import Clickable from '@components/Clickable';
 import { useInjectSaga } from 'utils/injectSaga';
+import saga from './saga';
 import { selectHomeContainer, selectReposData, selectReposError, selectRepoName } from './selectors';
 import { homeContainerCreators } from './reducer';
-import saga from './saga';
 
 const { Search } = Input;
 
@@ -42,6 +42,7 @@ const RightContent = styled.div`
   align-self: flex-end;
 `;
 export function HomeContainer({
+  dispatchGetItunes,
   dispatchGithubRepos,
   dispatchClearGithubRepos,
   intl,
@@ -51,9 +52,9 @@ export function HomeContainer({
   maxwidth,
   padding
 }) {
-  useInjectSaga({ key: 'homeContainer', saga });
+  // useInjectSaga({ key: 'homeContainer', saga });
   const [loading, setLoading] = useState(false);
-
+  console.log(reposData);
   useEffect(() => {
     const loaded = get(reposData, 'items', null) || reposError;
     if (loading && loaded) {
@@ -71,8 +72,10 @@ export function HomeContainer({
   const history = useHistory();
 
   const handleOnChange = rName => {
+    console.log(rName);
     if (!isEmpty(rName)) {
       dispatchGithubRepos(rName);
+      dispatchGetItunes(rName)
       setLoading(true);
     } else {
       dispatchClearGithubRepos();
@@ -151,6 +154,7 @@ export function HomeContainer({
 }
 
 HomeContainer.propTypes = {
+  dispatchGetItunes: PropTypes.func,
   dispatchGithubRepos: PropTypes.func,
   dispatchClearGithubRepos: PropTypes.func,
   intl: PropTypes.object,
@@ -176,13 +180,17 @@ const mapStateToProps = createStructuredSelector({
   reposData: selectReposData(),
   reposError: selectReposError(),
   repoName: selectRepoName()
+
 });
 
 function mapDispatchToProps(dispatch) {
-  const { requestGetGithubRepos, clearGithubRepos } = homeContainerCreators;
+  const { requestGetGithubRepos, clearGithubRepos, requestGetItunes } = homeContainerCreators;
   return {
     dispatchGithubRepos: repoName => dispatch(requestGetGithubRepos(repoName)),
-    dispatchClearGithubRepos: () => dispatch(clearGithubRepos())
+    dispatchClearGithubRepos: () => dispatch(clearGithubRepos()),
+
+    dispatchGetItunes: (repoName) => dispatch(requestGetItunes(repoName))
+
   };
 }
 

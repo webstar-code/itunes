@@ -29,7 +29,7 @@ const theme = {
 export function App({ location }) {
   return (
     <ThemeProvider theme={theme}>
-      <Header />
+      {/* <Header /> */}
       <Layout.Content>
         <For
           ParentComponent={props => <Switch {...props} />}
