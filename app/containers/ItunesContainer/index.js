@@ -2,23 +2,27 @@ import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
-import { Skeleton, Input } from 'antd';
-import { Container, CustomTitle, CustomCard, CustomItemCard, Meta, MetaTitle, MetaDescription } from './styles';
+import { Skeleton, Input, Card } from 'antd';
+import { Container, CustomTitle, CustomCard } from './styles';
 import T from '@components/T';
 import isEmpty from 'lodash/isEmpty';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
-import { selectArtistName, selectMusic, selectError } from './selectors';
+import { selectArtistName, selectSongs, selectmusicVideo, selectError } from './selectors';
 import { itunesContainerCreators } from './reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from './saga';
 
+import Songs from './songs'
+import MusicVideo from './musicVideo'
+
 const { Search } = Input;
 const ItunesContainer = ({
   artistName,
-  music = {},
+  songs = {},
+  musicVideo = {},
   error,
   dispatchGetItunes,
   dispatchClearItunes,
@@ -30,11 +34,13 @@ const ItunesContainer = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loaded = get(music, 'results', null);
+    const loaded = get(songs, 'results', null);
     if (loading && loaded) {
       setLoading(false);
     }
-  }, [music]);
+  }, [songs]);
+  console.log(songs);
+  console.log(musicVideo);
 
   const handleOnChange = value => {
     if (!isEmpty(value)) {
@@ -47,14 +53,14 @@ const ItunesContainer = ({
 
   const debouceHandleOnChange = debounce(handleOnChange, 200);
 
-  const results = get(music, 'results', []);
-  const resultCount = get(music, 'resultCount', 0);
+  const results = get(songs, 'results', []);
+  const resultCount = get(songs, 'resultCount', 0);
 
   const renderErrorState = () => {
     let localerror;
     if (error) {
       localerror = error;
-    } else if (!get(music, 'resultCount', 0)) {
+    } else if (!get(songs, 'resultCount', 0)) {
       localerror = 'search_music_default';
     }
     return (
@@ -67,6 +73,29 @@ const ItunesContainer = ({
     );
   };
 
+
+  const tabList = [
+    {
+      key: 'songs',
+      tab: 'songs'
+    },
+    {
+      key: 'musicVideo',
+      tab: 'videos'
+    },
+  ]
+  const [currtab, setCurrtab] = useState({ key: 'songs', tab: 'songs' })
+
+  const onTabChange = (key, type) => {
+    console.log(key, type);
+    setCurrtab({ [type]: key });
+  };
+  const contentListNoTitle = {
+    songs: <Songs loading={loading} />,
+    musicVideo: <MusicVideo loading={loading} />,
+  };
+
+
   return (
     <Container maxWidth={maxWidth} padding={padding}>
       <CustomTitle>Itunes</CustomTitle>
@@ -78,30 +107,16 @@ const ItunesContainer = ({
         style={{ width: 300 }}
         onChange={e => debouceHandleOnChange(e.target.value)}
       />
-
-      {results && (results.length !== 0 || loading) && (
-        <CustomCard>
-          <Skeleton loading={loading} active>
-            <MetaTitle strong>{resultCount} Results Found.</MetaTitle>
-            {results.map((item, index) => (
-              <CustomItemCard
-                bodyStyle={{ padding: 10 }}
-                style={{ height: 60 }}
-                hoverable
-                key={index}
-                cover={
-                  <img alt="example" src={item.artworkUrl60} width="60px" height="60px" style={{ minWidth: 60 }} />
-                }
-              >
-                <Meta>
-                  <MetaTitle>{item.trackName}</MetaTitle>
-                  <MetaDescription type="secondary">{item.artistName}</MetaDescription>
-                </Meta>
-              </CustomItemCard>
-            ))}
-          </Skeleton>
-        </CustomCard>
-      )}
+      <Card
+        style={{ width: '100%', margin: 20}}
+        tabList={tabList}
+        activeTabKey={currtab.tab}
+        onTabChange={key => {
+          onTabChange(key, 'tab');
+        }}
+      >
+        {contentListNoTitle[currtab.tab]}
+      </Card>
       {renderErrorState()}
     </Container>
   );
@@ -109,7 +124,7 @@ const ItunesContainer = ({
 
 ItunesContainer.propTypes = {
   artistName: PropTypes.string,
-  music: PropTypes.shape({
+  songs: PropTypes.shape({
     resultCount: PropTypes.number,
     results: PropTypes.array
   }),
@@ -128,7 +143,8 @@ ItunesContainer.defaultProps = {
 
 const mapStateToProps = createStructuredSelector({
   artistName: selectArtistName(),
-  music: selectMusic(),
+  songs: selectSongs(),
+  musicVideo: selectmusicVideo(),
   error: selectError()
 });
 

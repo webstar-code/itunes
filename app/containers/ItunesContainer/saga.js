@@ -1,21 +1,48 @@
-import { put, call, takeLatest } from 'redux-saga/effects';
-import { getItunesMusic } from '@services/itunesApi';
+import { put, call, takeLatest, all } from 'redux-saga/effects';
+import { getItunesSongs, getItunesMusicVideo } from '@services/itunesApi';
 import { itunesContainerTypes, itunesContainerCreators } from './reducer';
 
 const { REQUEST_GET_ITUNES } = itunesContainerTypes;
-const { successGetItunes, failureGetItunes } = itunesContainerCreators;
+const { successGetSongs, failureGetSongs,
+  successGetmusicVideo, failureGetmusicVideo,  } = itunesContainerCreators;
 
-export function* getItunes(action) {
-  const response = yield call(getItunesMusic, action.artistName);
+export function* GetSongs(action) {
+  const response = yield call(getItunesSongs, action.artistName);
   const { data, ok } = response;
+  console.log(data);
   if (ok) {
-    yield put(successGetItunes(data));
+    yield put(successGetSongs(data));
   } else {
-    yield put(failureGetItunes(data));
+    yield put(failureGetSongs(data));
   }
 }
 
+export function* GetMusicVideo(action) {
+  const response = yield call(getItunesMusicVideo, action.artistName);
+  const { data, ok } = response;
+  console.log(data);
+  if (ok) {
+    yield put(successGetmusicVideo(data));
+  } else {
+    yield put(failureGetmusicVideo(data));
+  }
+}
+
+export function* watchSongs() {
+  yield takeLatest(REQUEST_GET_ITUNES, GetSongs);
+}
+
+export function* watchmusicVideo() {
+  yield takeLatest(REQUEST_GET_ITUNES, GetMusicVideo);
+}
+
+
 // Individual exports for testing
 export default function* itunesContainerSaga() {
-  yield takeLatest(REQUEST_GET_ITUNES, getItunes);
+  yield all([
+    watchSongs(),
+    watchmusicVideo()
+  ])
 }
+
+
