@@ -25,7 +25,7 @@ export const selectHomeContainer = () =>
 export const selectReposData = () =>
   createSelector(
     selectHomeContainerDomain,
-    substate => get(substate, 'reposData', null) 
+    substate => get(substate, 'reposData', null)
   );
 
 export const selectReposError = () =>

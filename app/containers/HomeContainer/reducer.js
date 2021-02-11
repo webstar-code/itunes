@@ -11,10 +11,8 @@ export const { Types: homeContainerTypes, Creators: homeContainerCreators } = cr
   requestGetGithubRepos: ['repoName'],
   successGetGithubRepos: ['data'],
   failureGetGithubRepos: ['error'],
-  clearGithubRepos: [],
+  clearGithubRepos: []
 });
-
-
 
 export const initialState = { repoName: null, reposData: [], reposError: null };
 

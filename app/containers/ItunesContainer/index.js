@@ -3,18 +3,15 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { Skeleton, Input } from 'antd';
-import {
-  Container, CustomTitle, CustomCard, CustomItemCard,
-  Meta, MetaTitle, MetaDescription
-} from './styles'
+import { Container, CustomTitle, CustomCard, CustomItemCard, Meta, MetaTitle, MetaDescription } from './styles';
 import T from '@components/T';
 import isEmpty from 'lodash/isEmpty';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
-import { selectArtistName, selectMusic, selectError } from './selectors'
-import { itunesContainerCreators } from './reducer'
+import { selectArtistName, selectMusic, selectError } from './selectors';
+import { itunesContainerCreators } from './reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from './saga';
 
@@ -37,16 +34,16 @@ const ItunesContainer = ({
     if (loading && loaded) {
       setLoading(false);
     }
-  }, [music])
+  }, [music]);
 
-  const handleOnChange = (value) => {
+  const handleOnChange = value => {
     if (!isEmpty(value)) {
       dispatchGetItunes(value);
       setLoading(true);
     } else {
-      dispatchClearItunes()
+      dispatchClearItunes();
     }
-  }
+  };
 
   const debouceHandleOnChange = debounce(handleOnChange, 200);
 
@@ -60,7 +57,6 @@ const ItunesContainer = ({
     } else if (!get(music, 'resultCount', 0)) {
       localerror = 'search_music_default';
     }
-    console.log(localerror);
     return (
       !loading &&
       localerror && (
@@ -74,44 +70,42 @@ const ItunesContainer = ({
   return (
     <Container maxWidth={maxWidth} padding={padding}>
       <CustomTitle>Itunes</CustomTitle>
-      <Search placeholder="search artist"
+      <Search
+        placeholder="search artist"
         allowClear
         enterButton
         size="large"
         style={{ width: 300 }}
-        onChange={(e) => debouceHandleOnChange(e.target.value)} />
+        onChange={e => debouceHandleOnChange(e.target.value)}
+      />
 
-
-      {results && (results.length !== 0 || loading) &&
+      {results && (results.length !== 0 || loading) && (
         <CustomCard>
           <Skeleton loading={loading} active>
             <MetaTitle strong>{resultCount} Results Found.</MetaTitle>
-            {results.map((item, index) =>
-              <CustomItemCard bodyStyle={{ padding: 10 }}
+            {results.map((item, index) => (
+              <CustomItemCard
+                bodyStyle={{ padding: 10 }}
                 style={{ height: 60 }}
                 hoverable
                 key={index}
-                cover={<img
-                  alt="example"
-                  src={item.artworkUrl60}
-                  width="60px"
-                  height="60px"
-                  style={{ minWidth: 60 }}
-                />}>
+                cover={
+                  <img alt="example" src={item.artworkUrl60} width="60px" height="60px" style={{ minWidth: 60 }} />
+                }
+              >
                 <Meta>
                   <MetaTitle>{item.trackName}</MetaTitle>
                   <MetaDescription type="secondary">{item.artistName}</MetaDescription>
                 </Meta>
               </CustomItemCard>
-            )}
+            ))}
           </Skeleton>
         </CustomCard>
-      }
+      )}
       {renderErrorState()}
-
     </Container>
-  )
-}
+  );
+};
 
 ItunesContainer.propTypes = {
   artistName: PropTypes.string,
@@ -123,7 +117,7 @@ ItunesContainer.propTypes = {
   dispatchGetItunes: PropTypes.func,
   dispatchClearItunes: PropTypes.func,
   intl: PropTypes.object,
-  maxwidth: PropTypes.number,
+  maxWidth: PropTypes.number,
   padding: PropTypes.number
 };
 
@@ -136,15 +130,15 @@ const mapStateToProps = createStructuredSelector({
   artistName: selectArtistName(),
   music: selectMusic(),
   error: selectError()
-})
+});
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   const { requestGetItunes, clearItunes } = itunesContainerCreators;
   return {
-    dispatchGetItunes: (artistName) => dispatch(requestGetItunes(artistName)),
+    dispatchGetItunes: artistName => dispatch(requestGetItunes(artistName)),
     dispatchClearItunes: () => dispatch(clearItunes())
-  }
-}
+  };
+};
 const withConnect = connect(
   mapStateToProps,
   mapDispatchToProps

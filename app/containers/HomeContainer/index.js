@@ -52,9 +52,8 @@ export function HomeContainer({
   maxwidth,
   padding
 }) {
-  // useInjectSaga({ key: 'homeContainer', saga });
+  useInjectSaga({ key: 'homeContainer', saga });
   const [loading, setLoading] = useState(false);
-  console.log(reposData);
   useEffect(() => {
     const loaded = get(reposData, 'items', null) || reposError;
     if (loading && loaded) {
@@ -72,10 +71,9 @@ export function HomeContainer({
   const history = useHistory();
 
   const handleOnChange = rName => {
-    console.log(rName);
     if (!isEmpty(rName)) {
       dispatchGithubRepos(rName);
-      dispatchGetItunes(rName)
+      dispatchGetItunes(rName);
       setLoading(true);
     } else {
       dispatchClearGithubRepos();
@@ -180,7 +178,6 @@ const mapStateToProps = createStructuredSelector({
   reposData: selectReposData(),
   reposError: selectReposError(),
   repoName: selectRepoName()
-
 });
 
 function mapDispatchToProps(dispatch) {
@@ -189,8 +186,7 @@ function mapDispatchToProps(dispatch) {
     dispatchGithubRepos: repoName => dispatch(requestGetGithubRepos(repoName)),
     dispatchClearGithubRepos: () => dispatch(clearGithubRepos()),
 
-    dispatchGetItunes: (repoName) => dispatch(requestGetItunes(repoName))
-
+    dispatchGetItunes: repoName => dispatch(requestGetItunes(repoName))
   };
 }
 

@@ -18,7 +18,7 @@ import { routeConfig } from '@app/routeConfig';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from '@app/global-styles';
 import { colors } from '@themes';
-import Header from '@components/Header';
+// import Header from '@components/Header';
 import For from '@components/For';
 
 const theme = {

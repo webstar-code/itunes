@@ -15,7 +15,6 @@ export function* getItunes(action) {
   }
 }
 
-
 // Individual exports for testing
 export default function* itunesContainerSaga() {
   yield takeLatest(REQUEST_GET_ITUNES, getItunes);

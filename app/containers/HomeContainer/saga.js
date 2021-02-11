@@ -15,7 +15,6 @@ export function* getGithubRepos(action) {
   }
 }
 
-
 // Individual exports for testing
 export default function* homeContainerSaga() {
   yield takeLatest(REQUEST_GET_GITHUB_REPOS, getGithubRepos);

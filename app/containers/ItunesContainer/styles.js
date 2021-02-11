@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Card, Skeleton, Typography, Input } from 'antd';
+import { Card, Typography } from 'antd';
 
-const { Title, Text } = Typography
+const { Title, Text } = Typography;
 
 export const Container = styled.div`
   && {
@@ -32,7 +32,6 @@ export const CustomCard = styled(Card)`
   }
 `;
 
-
 export const CustomItemCard = styled(Card)`
   && {
     width: 100%;
@@ -46,24 +45,20 @@ export const CustomItemCard = styled(Card)`
 `;
 
 export const MetaTitle = styled(Text)`
-&& {
-  width: calc(100% - 60px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 2px;
-  font-weight: 700;
-}
+  && {
+    width: calc(100% - 60px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+    font-weight: 700;
+  }
 `;
 export const MetaDescription = styled(Text)`
   font-size: 12px;
 `;
 export const Meta = styled(Text)`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  `;
-
-
-
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
