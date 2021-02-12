@@ -9,7 +9,6 @@ const { successGetSongs, failureGetSongs,
 export function* GetSongs(action) {
   const response = yield call(getItunesSongs, action.artistName);
   const { data, ok } = response;
-  console.log(data);
   if (ok) {
     yield put(successGetSongs(data));
   } else {
@@ -20,7 +19,6 @@ export function* GetSongs(action) {
 export function* GetMusicVideo(action) {
   const response = yield call(getItunesMusicVideo, action.artistName);
   const { data, ok } = response;
-  console.log(data);
   if (ok) {
     yield put(successGetmusicVideo(data));
   } else {

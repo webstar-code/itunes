@@ -5,9 +5,10 @@
  * That allows to change them more easily later on.
  */
 
-const primary = '#fcedda';
+
+const primary = '#f7f7f7';
 const text = '#212529';
-const secondary = '#f8c49c';
+const secondary = '#f7f7f7';
 const success = '#28a745';
 const error = '#dc3545';
 
@@ -22,11 +23,13 @@ const colors = {
   theme: {
     lightMode: {
       primary,
-      secondary
+      secondary,
+      text
     },
     darkMode: {
       primary: secondary,
-      secondary: primary
+      secondary: '#090909e0',
+      text: '#f7f7f7'
     }
   }
 };

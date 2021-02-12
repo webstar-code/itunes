@@ -7,7 +7,7 @@ const itunesContainerDomain = state => state.itunesContainer || initialState;
 export const selectArtistName = () =>
   createSelector(
     itunesContainerDomain,
-    state => state.artistName
+    state => get(state, 'artistName', null)
   );
 
 export const selectSongs = () =>

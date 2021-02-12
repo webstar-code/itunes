@@ -2,17 +2,14 @@ import produce from 'immer';
 import { createActions } from 'reduxsauce';
 import get from 'lodash/get';
 
-export const initialState = { artistName: null, songs: [], musicVideo: [], error: null };
+export const initialState = { artistName: null, songs: [], musicVideo: [], error: null};
 
 export const { Types: itunesContainerTypes, Creators: itunesContainerCreators } = createActions({
   requestGetItunes: ['artistName'],
-
   successGetSongs: ['songs'],
   failureGetSongs: ['error'],
-
   successGetmusicVideo: ['musicVideo'],
   failureGetmusicVideo: ['error'],
-
   clearItunes: []
 });
 
