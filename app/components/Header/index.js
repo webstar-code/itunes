@@ -8,24 +8,25 @@ import React from 'react';
 import { Layout } from 'antd';
 import styled from 'styled-components';
 import { injectIntl } from 'react-intl';
-import { fonts, colors } from '@themes';
+import { fonts } from '@themes';
 import T from '@components/T';
-import logo from '@images/icon-512x512.png';
+import logo from '@images/icon-64.png';
 const StyledHeader = styled(Layout.Header)`
   && {
     &.ant-layout-header {
       padding: 0 1rem;
-      height: 7rem;
+      height: 5rem;
     }
     display: flex;
+    align-items: center;
     justify-content: center;
-    background-color: ${colors.primary};
+    background-color: #fafafa;
   }
 `;
 const Logo = styled.img`
-  height: 5rem;
+  height: 2rem;
   width: auto;
-  margin-top: 1rem;
+  margin-right: 0.8rem;
 `;
 const Title = styled(T)`
   && {
@@ -39,7 +40,7 @@ function Header(props) {
   return (
     <StyledHeader {...props} data-testid="header">
       <Logo alt="logo" src={logo} />
-      <Title type="heading" id="wednesday_solutions" />
+      <Title type="heading" id="itunes" />
     </StyledHeader>
   );
 }

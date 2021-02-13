@@ -4,6 +4,12 @@ import get from 'lodash/get';
 
 const itunesContainerDomain = state => state.itunesContainer || initialState;
 
+export const selectItunesContainer = () =>
+  createSelector(
+    itunesContainerDomain,
+    state => state
+  );
+
 export const selectArtistName = () =>
   createSelector(
     itunesContainerDomain,
@@ -27,3 +33,5 @@ export const selectError = () =>
     itunesContainerDomain,
     state => get(state, 'error', null)
   );
+
+export default selectItunesContainer;

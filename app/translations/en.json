@@ -12,10 +12,9 @@
   "repository_stars": "Repository stars: {stars}",
   "wednesday_solutions": "Wednesday Solutions",
 
-
+  "itunes": "ITUNES",
   "search_songs_default": "Search for songs by entering the artist name in the search box",
   "matching_songs": "{resultCount} results found.",
   "search_musicVideo_default": "Search for music videos by entering the artist name in the search box",
   "matching_musicVideos": "{resultCount} results found."
-  
 }

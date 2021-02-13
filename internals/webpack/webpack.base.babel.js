@@ -64,8 +64,7 @@ module.exports = options => ({
               lessOptions: {
                 javascriptEnabled: true,
                 modifyVars: {
-                  'primary-color': colors.secondary,
-                  'heading-color': '#ffffff'
+                  'primary-color': colors.primary
                 }
               }
             }

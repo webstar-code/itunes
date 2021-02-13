@@ -1,35 +1,24 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
-import { Skeleton, Input, Card, Switch } from 'antd';
-import { Container, CustomTitle, CustomCard, RightContent, Item } from './styles';
+import { Input, Switch } from 'antd';
+import { Container, CustomCard, RightContent, Item } from './styles';
 import isEmpty from 'lodash/isEmpty';
 import debounce from 'lodash/debounce';
 import { injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
-import { selectArtistName, selectSongs, selectmusicVideo, selectError } from './selectors';
 import { itunesContainerCreators } from './reducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from './saga';
 import { colors } from '@themes';
-import Songs from './songs'
-import MusicVideo from './musicVideo'
+import Songs from './songs';
+import MusicVideo from './musicVideo';
 
 const { Search } = Input;
 
-const ItunesContainer = ({
-  artistName,
-  songs = {},
-  musicVideo = {},
-  error,
-  dispatchGetItunes,
-  dispatchClearItunes,
-  intl,
-  maxWidth,
-  padding
-}) => {
+const ItunesContainer = ({ dispatchGetItunes, dispatchClearItunes, intl, maxWidth, padding }) => {
   useInjectSaga({ key: 'itunesContainer', saga });
   const [darkMode, setDarkMode] = useState(false);
 
@@ -50,32 +39,30 @@ const ItunesContainer = ({
     {
       key: 'musicVideo',
       tab: 'videos'
-    },
-  ]
-  const [currtab, setCurrtab] = useState({ key: 'songs', tab: 'songs' })
-  
+    }
+  ];
+  const [currtab, setCurrtab] = useState({ key: 'songs', tab: 'songs' });
+
   const onTabChange = (key, type) => {
-    console.log(key, type);
     setCurrtab({ [type]: key });
   };
   const contentListNoTitle = {
     songs: <Songs />,
-    musicVideo: <MusicVideo />,
+    musicVideo: <MusicVideo />
   };
-  
-  const theme = (({ primary, secondary, text }) => ({ fg: primary, bg: secondary, text: text }))
-    (darkMode ? colors.theme.darkMode : colors.theme.lightMode)
+
+  const theme = (({ primary, secondary, text }) => ({ fg: primary, bg: secondary, text: text }))(
+    darkMode ? colors.theme.darkMode : colors.theme.lightMode
+  );
 
   return (
     <Container maxWidth={maxWidth} padding={padding}>
-      <CustomTitle>Itunes</CustomTitle>
-
       <RightContent>
-        <Switch checkedChildren="Dark" unCheckedChildren="light"
-          onChange={() => setDarkMode(!darkMode)} />
+        <Switch checkedChildren="Dark" unCheckedChildren="light" onChange={() => setDarkMode(!darkMode)} />
       </RightContent>
 
       <Search
+        data-testid="search-bar"
         placeholder="search artist"
         allowClear
         enterButton
@@ -87,30 +74,21 @@ const ItunesContainer = ({
       <ThemeProvider theme={theme}>
         <CustomCard
           style={{ margin: 20, color: theme.text }}
-          bodyStyle={{margin: 0, background: theme.bg}}
-          headStyle={{background: theme.bg, color: theme.text}}
+          bodyStyle={{ margin: 0, background: theme.bg }}
           tabList={tabList}
           activeTabKey={currtab.tab}
           onTabChange={key => {
             onTabChange(key, 'tab');
-          }}>
-          <Item style={{ margin: 0, color: theme.text }}>
-            {contentListNoTitle[currtab.tab]}
-          </Item>
+          }}
+        >
+          <Item style={{ margin: 0, color: theme.text }}>{contentListNoTitle[currtab.tab]}</Item>
         </CustomCard>
       </ThemeProvider>
-
     </Container>
   );
 };
 
 ItunesContainer.propTypes = {
-  artistName: PropTypes.string,
-  songs: PropTypes.shape({
-    resultCount: PropTypes.number,
-    results: PropTypes.array
-  }),
-  error: PropTypes.string,
   dispatchGetItunes: PropTypes.func,
   dispatchClearItunes: PropTypes.func,
   intl: PropTypes.object,
@@ -123,12 +101,7 @@ ItunesContainer.defaultProps = {
   padding: 20
 };
 
-const mapStateToProps = createStructuredSelector({
-  artistName: selectArtistName(),
-  songs: selectSongs(),
-  musicVideo: selectmusicVideo(),
-  error: selectError()
-});
+const mapStateToProps = createStructuredSelector({});
 
 const mapDispatchToProps = dispatch => {
   const { requestGetItunes, clearItunes } = itunesContainerCreators;

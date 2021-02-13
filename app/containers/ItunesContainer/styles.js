@@ -1,7 +1,5 @@
 import styled from 'styled-components';
-import {Typography, Card } from 'antd';
-import { colors } from '@themes'
-const { Title} = Typography;
+import { Card } from 'antd';
 
 export const Container = styled.div`
   && {
@@ -11,32 +9,27 @@ export const Container = styled.div`
     max-width: ${props => props.maxWidth}px;
     width: 100%;
     margin: 0px auto;
-    background: ${props => props.theme.fg};
     padding: ${props => props.padding}px;
   }
 `;
 
-export const CustomTitle = styled(Title)`
+export const CustomCard = styled(Card)`
   && {
-    font-size: 48px;
-    margin: 0;
-    text-transform: uppercase;
+    .ant-tabs-tab-btn {
+      color: ${props => props.theme.text};
+    }
+    width: 100%;
+    max-width: 100%;
+    background: ${props => props.theme.bg};
   }
 `;
 
-export const CustomCard = styled(Card)`
+export const Item = styled.div`
+  && {
     width: 100%;
     max-width: 100%;
     color: ${props => props.theme.text} !important;
-    background: ${props => props.theme.bg};
-`;
-
-export const Item = styled.div`
-    && {
-      width: 100%;
-      max-width: 100%;
-      color: ${props => props.theme.text} !important;
-    }
+  }
 `;
 
 export const RightContent = styled.div`
