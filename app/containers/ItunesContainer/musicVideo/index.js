@@ -4,8 +4,8 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import T from '@components/T';
 import PropTypes from 'prop-types';
-import { Skeleton, Card, Row, Col } from 'antd';
-import { selectArtistName, selectmusicVideo, selectError } from '../selectors'
+import { Skeleton, Row, Col } from 'antd';
+import { selectArtistName, selectmusicVideo, selectError } from '../selectors';
 import { createStructuredSelector } from 'reselect';
 import { CustomCard, CustomItemCard, Meta, MetaTitle, MetaDescription } from './styles';
 
@@ -19,7 +19,8 @@ const MusicVideo = ({ artistName, musicVideo = {}, error = null }) => {
     if (!isEmpty(artistName) && !musicVideo?.results?.length) {
       setLoading(true);
     }
-  }, []);
+  }, [artistName]);
+
   useEffect(() => {
     const loaded = get(musicVideo, 'results', null);
     if (loading && loaded) {
@@ -37,7 +38,7 @@ const MusicVideo = ({ artistName, musicVideo = {}, error = null }) => {
     return (
       !loading &&
       localerror && (
-        <CustomCard color={error ? "true" : "false"}>
+        <CustomCard color={error ? 'true' : 'false'}>
           <T id={localerror} />
         </CustomCard>
       )
@@ -46,34 +47,41 @@ const MusicVideo = ({ artistName, musicVideo = {}, error = null }) => {
 
   return (
     <>
-      { results && (results.length !== 0 || loading) && (
+      {results && (results.length !== 0 || loading) && (
         <>
-          <T id="matching_musicVideos" values={{ resultCount }} />
-          <Row gutter={[24, 24]} style={{ marginTop: 10 }}>
-            {results.map((item, index) => (
-              <Col span={12} key={index} >
-                <CustomItemCard
-                  bodyStyle={{ padding: 10, height: '100%' }}
-                  style={{ height: 160 }}
-                  cover={
-                    <img alt="example" src={item.artworkUrl100} width="100px" height="100px" style={{ minWidth: `100` }} />
-                  }
-                >
-                  <Meta>
-                    <MetaTitle>{item.trackName}</MetaTitle>
-                    <MetaDescription>{item.artistName}</MetaDescription>
-                  </Meta>
-                </CustomItemCard>
-              </Col>
-            ))}
-          </Row>
+          <Skeleton loading={loading} active>
+            <T id="matching_musicVideos" values={{ resultCount }} />
+            <Row gutter={[24, 24]} style={{ marginTop: 10 }}>
+              {results.map((item, index) => (
+                <Col span={12} key={index}>
+                  <CustomItemCard
+                    bodyStyle={{ padding: 10, height: '100%' }}
+                    style={{ height: 160 }}
+                    cover={
+                      <img
+                        alt="example"
+                        src={item.artworkUrl100}
+                        width="100px"
+                        height="100px"
+                        style={{ minWidth: `100` }}
+                      />
+                    }
+                  >
+                    <Meta>
+                      <MetaTitle>{item.trackName}</MetaTitle>
+                      <MetaDescription>{item.artistName}</MetaDescription>
+                    </Meta>
+                  </CustomItemCard>
+                </Col>
+              ))}
+            </Row>
+          </Skeleton>
         </>
       )}
       {Error()}
     </>
-
-  )
-}
+  );
+};
 
 MusicVideo.propTypes = {
   artistName: PropTypes.string,
@@ -81,13 +89,13 @@ MusicVideo.propTypes = {
     resultCount: PropTypes.Number,
     results: PropTypes.array
   }),
-  error: PropTypes.string,
-}
+  error: PropTypes.string
+};
 
 const mapStateToProps = createStructuredSelector({
   artistName: selectArtistName(),
   musicVideo: selectmusicVideo(),
   error: selectError()
-})
+});
 
 export default connect(mapStateToProps)(MusicVideo);

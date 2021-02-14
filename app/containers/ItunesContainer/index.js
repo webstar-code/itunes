@@ -56,22 +56,22 @@ const ItunesContainer = ({ dispatchGetItunes, dispatchClearItunes, intl, maxWidt
   );
 
   return (
-    <Container maxWidth={maxWidth} padding={padding}>
-      <RightContent>
-        <Switch checkedChildren="Dark" unCheckedChildren="light" onChange={() => setDarkMode(!darkMode)} />
-      </RightContent>
+    <ThemeProvider theme={theme}>
+      <Container maxWidth={maxWidth} padding={padding}>
+        <RightContent>
+          <Switch checkedChildren="Dark" unCheckedChildren="light" onChange={() => setDarkMode(!darkMode)} />
+        </RightContent>
 
-      <Search
-        data-testid="search-bar"
-        placeholder="search artist"
-        allowClear
-        enterButton
-        size="large"
-        style={{ width: 300, marginTop: 20 }}
-        onChange={e => debouceHandleOnChange(e.target.value)}
-      />
+        <Search
+          data-testid="search-bar"
+          placeholder="search artist"
+          allowClear
+          enterButton
+          size="large"
+          style={{ width: 300, marginTop: 20 }}
+          onChange={e => debouceHandleOnChange(e.target.value)}
+        />
 
-      <ThemeProvider theme={theme}>
         <CustomCard
           style={{ margin: 20, color: theme.text }}
           bodyStyle={{ margin: 0, background: theme.bg }}
@@ -83,8 +83,8 @@ const ItunesContainer = ({ dispatchGetItunes, dispatchClearItunes, intl, maxWidt
         >
           <Item style={{ margin: 0, color: theme.text }}>{contentListNoTitle[currtab.tab]}</Item>
         </CustomCard>
-      </ThemeProvider>
-    </Container>
+      </Container>
+    </ThemeProvider>
   );
 };
 

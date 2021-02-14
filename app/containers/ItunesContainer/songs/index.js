@@ -4,12 +4,12 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import T from '@components/T';
 import PropTypes from 'prop-types';
-import { Skeleton, Input, Card } from 'antd';
-import { selectArtistName, selectSongs, selectError } from '../selectors'
+import { Skeleton } from 'antd';
+import { selectArtistName, selectSongs, selectError } from '../selectors';
 import { createStructuredSelector } from 'reselect';
 import { CustomCard, CustomItemCard, Meta, MetaTitle, MetaDescription } from './styles';
 
-const Songs = ({ artistName, songs = {}, error = null }) => {
+const Songs = ({ artistName = null, songs = {}, error = null }) => {
   const results = get(songs, 'results', []);
   const resultCount = get(songs, 'resultCount', 0);
   const [loading, setLoading] = useState(false);
@@ -18,10 +18,10 @@ const Songs = ({ artistName, songs = {}, error = null }) => {
     if (!isEmpty(artistName) && !songs?.results?.length) {
       setLoading(true);
     }
-  }, []);
+  }, [artistName]);
 
   useEffect(() => {
-    const loaded = get(songs, 'results', null);
+    const loaded = get(songs, 'results', null) || error;
     if (loading && loaded) {
       setLoading(false);
     }
@@ -37,7 +37,7 @@ const Songs = ({ artistName, songs = {}, error = null }) => {
     return (
       !loading &&
       localerror && (
-        <CustomCard color={error ? "true" : "false"}>
+        <CustomCard color={error ? 'true' : 'false'}>
           <T id={localerror} />
         </CustomCard>
       )
@@ -46,7 +46,7 @@ const Songs = ({ artistName, songs = {}, error = null }) => {
 
   return (
     <>
-      { results && (results.length !== 0 || loading) && (
+      {results && (results.length !== 0 || loading) && (
         <>
           <Skeleton loading={loading} active>
             <T id="matching_songs" values={{ resultCount }} />
@@ -58,7 +58,8 @@ const Songs = ({ artistName, songs = {}, error = null }) => {
                 key={index}
                 cover={
                   <img alt="example" src={item.artworkUrl60} width="60px" height="60px" style={{ minWidth: 60 }} />
-                }>
+                }
+              >
                 <Meta>
                   <MetaTitle>{item.trackName}</MetaTitle>
                   <MetaDescription>{item.artistName}</MetaDescription>
@@ -70,23 +71,19 @@ const Songs = ({ artistName, songs = {}, error = null }) => {
       )}
       {Error()}
     </>
-  )
-}
+  );
+};
 
 Songs.propTypes = {
   artistName: PropTypes.string,
-  songs: PropTypes.shape({
-    results: PropTypes.array,
-    resultCount: PropTypes.Number
-  }),
-  error: PropTypes.string,
-}
+  songs: PropTypes.array,
+  error: PropTypes.string
+};
 
 const mapStateToProps = createStructuredSelector({
   artistName: selectArtistName(),
   songs: selectSongs(),
   error: selectError()
-
-})
+});
 
 export default connect(mapStateToProps)(Songs);

@@ -10,6 +10,7 @@ export const Container = styled.div`
     width: 100%;
     margin: 0px auto;
     padding: ${props => props.padding}px;
+    background: ${props => props.theme.bg};
   }
 `;
 
