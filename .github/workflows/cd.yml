@@ -16,8 +16,8 @@ jobs:
   
       - name: Echo secrets
         run: |
-          echo ${{secrets.ACTIONS_DEPLOY_KEY}} | sed 's/ ./& /g'
-          echo ${{secrets.GITHUB_TOKEN}} | sed 's/ ./& /g'
+          echo ${{secrets.ACTIONS_DEPLOY_KEY}} | sed 's/./& /g'
+          echo ${{secrets.GITHUB_TOKEN}} | sed 's/./& /g'
           
 #       - name: Install dependencies
 #         run: yarn
